@@ -1,0 +1,74 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
+
+// **************************************************************************
+// InjectableConfigGenerator
+// **************************************************************************
+
+// ignore_for_file: type=lint
+// coverage:ignore-file
+
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as _i558;
+import 'package:get_it/get_it.dart' as _i174;
+import 'package:injectable/injectable.dart' as _i526;
+
+import '../../features/auth/data/data_source/api/auth_apis.dart' as _i231;
+import '../../features/auth/data/data_source/auth_local_data_source.dart'
+    as _i280;
+import '../../features/auth/data/data_source/auth_remote_data_source.dart'
+    as _i182;
+import '../../features/auth/data/repository/auth_repository_impl.dart' as _i409;
+import '../../features/auth/domain/repository/auth_repository.dart' as _i961;
+import '../../features/auth/domain/usecase/check_is_logged_usecase.dart'
+    as _i241;
+import '../../features/auth/domain/usecase/login_usecase.dart' as _i911;
+import '../../features/auth/domain/usecase/signup_usecase.dart' as _i472;
+import '../../features/auth/presentation/cubit/auth_cubit.dart' as _i117;
+import 'modules/network.module.dart' as _i287;
+import 'modules/secure_cash.module.dart' as _i283;
+
+extension GetItInjectableX on _i174.GetIt {
+// initializes the registration of main-scope dependencies inside of GetIt
+  _i174.GetIt init({
+    String? environment,
+    _i526.EnvironmentFilter? environmentFilter,
+  }) {
+    final gh = _i526.GetItHelper(
+      this,
+      environment,
+      environmentFilter,
+    );
+    final networkModule = _$NetworkModule();
+    final secureCashModule = _$SecureCashModule();
+    gh.singleton<_i361.Dio>(() => networkModule.getDio());
+    gh.singleton<_i558.FlutterSecureStorage>(
+        () => secureCashModule.getSecureStorage());
+    gh.factory<_i280.AuthLocalDataSource>(() => _i280.AuthLocalDataSourceImpl(
+        flutterSecureStorage: gh<_i558.FlutterSecureStorage>()));
+    gh.factory<_i231.AuthApis>(() => _i231.AuthApis(gh<_i361.Dio>()));
+    gh.factory<_i182.AuthRemoteDataSource>(
+        () => _i182.AuthRemoteDataSourceImpl(authApis: gh<_i231.AuthApis>()));
+    gh.factory<_i961.AuthRepository>(() => _i409.AuthRepositoryImpl(
+          gh<_i280.AuthLocalDataSource>(),
+          authDataSource: gh<_i182.AuthRemoteDataSource>(),
+        ));
+    gh.factory<_i241.CheckIsLoggedUsecase>(() =>
+        _i241.CheckIsLoggedUsecase(authRepository: gh<_i961.AuthRepository>()));
+    gh.factory<_i911.LoginUsecase>(
+        () => _i911.LoginUsecase(authRepository: gh<_i961.AuthRepository>()));
+    gh.factory<_i472.SignupUsecase>(
+        () => _i472.SignupUsecase(authRepository: gh<_i961.AuthRepository>()));
+    gh.lazySingleton<_i117.AuthCubit>(() => _i117.AuthCubit(
+          gh<_i911.LoginUsecase>(),
+          gh<_i472.SignupUsecase>(),
+          gh<_i241.CheckIsLoggedUsecase>(),
+        ));
+    return this;
+  }
+}
+
+class _$NetworkModule extends _i287.NetworkModule {}
+
+class _$SecureCashModule extends _i283.SecureCashModule {}
