@@ -1,12 +1,13 @@
 import 'package:ecommerce_app/core/resources/assets_manager.dart';
 import 'package:ecommerce_app/core/resources/color_manager.dart';
 import 'package:ecommerce_app/core/resources/styles_manager.dart';
+import 'package:ecommerce_app/features/categories/domain/entities/category_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCategoryWidget extends StatelessWidget {
-  const CustomCategoryWidget({super.key});
-
+  const CustomCategoryWidget({super.key, required this.category});
+  final CategoryEntity category;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -41,15 +42,15 @@ class CustomCategoryWidget extends StatelessWidget {
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
             ),
-            child: Image.asset(
-              ImageAssets.categoryHomeImage,
+            child: Image.network(
+              category.image ?? "",
               fit: BoxFit.cover,
             ),
           ),
         ),
         SizedBox(height: 8.h),
         Text(
-          "men's fashion",
+          category.name ?? "",
           style: getRegularStyle(color: ColorManager.darkBlue, fontSize: 14.sp),
         ),
       ],

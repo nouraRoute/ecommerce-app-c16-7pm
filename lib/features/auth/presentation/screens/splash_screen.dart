@@ -34,7 +34,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 duration: Duration(seconds: 3),
                 tween: Tween<double>(begin: .5, end: 1),
                 builder: (context, t, _) {
-                  print('--->$t');
                   return Transform.scale(
                       scale: t, child: SvgPicture.asset(SvgAssets.routeLogo));
                 })),

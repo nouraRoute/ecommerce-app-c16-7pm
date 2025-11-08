@@ -26,6 +26,19 @@ import '../../features/auth/domain/usecase/check_is_logged_usecase.dart'
 import '../../features/auth/domain/usecase/login_usecase.dart' as _i911;
 import '../../features/auth/domain/usecase/signup_usecase.dart' as _i472;
 import '../../features/auth/presentation/cubit/auth_cubit.dart' as _i117;
+import '../../features/categories/data/api/categories_api.dart' as _i146;
+import '../../features/categories/data/datasources/categories_remote_datasource.dart'
+    as _i16;
+import '../../features/categories/data/repositories/categories_respository_impl.dart'
+    as _i225;
+import '../../features/categories/domain/repositories/categories_repository.dart'
+    as _i488;
+import '../../features/categories/domain/usecases/get_categories_usecase.dart'
+    as _i76;
+import '../../features/categories/domain/usecases/get_sub_categories_usecase.dart'
+    as _i963;
+import '../../features/categories/presentation/cubit/categories_cubit.dart'
+    as _i802;
 import 'modules/network.module.dart' as _i287;
 import 'modules/secure_cash.module.dart' as _i283;
 
@@ -48,6 +61,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i280.AuthLocalDataSource>(() => _i280.AuthLocalDataSourceImpl(
         flutterSecureStorage: gh<_i558.FlutterSecureStorage>()));
     gh.factory<_i231.AuthApis>(() => _i231.AuthApis(gh<_i361.Dio>()));
+    gh.factory<_i146.CategoriesApi>(() => _i146.CategoriesApi(gh<_i361.Dio>()));
     gh.factory<_i182.AuthRemoteDataSource>(
         () => _i182.AuthRemoteDataSourceImpl(authApis: gh<_i231.AuthApis>()));
     gh.factory<_i961.AuthRepository>(() => _i409.AuthRepositoryImpl(
@@ -60,10 +74,23 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i911.LoginUsecase(authRepository: gh<_i961.AuthRepository>()));
     gh.factory<_i472.SignupUsecase>(
         () => _i472.SignupUsecase(authRepository: gh<_i961.AuthRepository>()));
+    gh.factory<_i16.CategoriesRemoteDatasource>(() =>
+        _i16.CategoriesRemoteDatasourceImpl(api: gh<_i146.CategoriesApi>()));
+    gh.factory<_i488.CategoriesRepository>(() => _i225.CategoriesRepositoryImpl(
+        categoriesRemoteDatasource: gh<_i16.CategoriesRemoteDatasource>()));
     gh.lazySingleton<_i117.AuthCubit>(() => _i117.AuthCubit(
           gh<_i911.LoginUsecase>(),
           gh<_i472.SignupUsecase>(),
           gh<_i241.CheckIsLoggedUsecase>(),
+        ));
+    gh.factory<_i963.GetSubCategoriesUsecase>(() =>
+        _i963.GetSubCategoriesUsecase(
+            categoryResponse: gh<_i488.CategoriesRepository>()));
+    gh.factory<_i76.GetCategoriesUsecase>(() => _i76.GetCategoriesUsecase(
+        categoriesRepository: gh<_i488.CategoriesRepository>()));
+    gh.lazySingleton<_i802.CategoriesCubit>(() => _i802.CategoriesCubit(
+          gh<_i76.GetCategoriesUsecase>(),
+          gh<_i963.GetSubCategoriesUsecase>(),
         ));
     return this;
   }
