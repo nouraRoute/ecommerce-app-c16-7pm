@@ -6,8 +6,8 @@ import '../../../../core/resources/assets_manager.dart';
 import '../../../../core/widget/home_screen_app_bar.dart';
 
 class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({super.key});
-
+  const ProductsScreen({super.key, required this.subcategoryID});
+  final String subcategoryID;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;

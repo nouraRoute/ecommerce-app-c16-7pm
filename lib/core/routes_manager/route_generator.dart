@@ -22,7 +22,7 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const MainLayout());
 
       case Routes.productsScreenRoute:
-        return MaterialPageRoute(builder: (_) => const ProductsScreen());
+        return MaterialPageRoute(builder: (context) =>   ProductsScreen());
 
       case Routes.productDetails:
         return MaterialPageRoute(builder: (_) => const ProductDetails());

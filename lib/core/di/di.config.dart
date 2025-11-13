@@ -26,6 +26,16 @@ import '../../features/auth/domain/usecase/check_is_logged_usecase.dart'
 import '../../features/auth/domain/usecase/login_usecase.dart' as _i911;
 import '../../features/auth/domain/usecase/signup_usecase.dart' as _i472;
 import '../../features/auth/presentation/cubit/auth_cubit.dart' as _i117;
+import '../../features/cart/data/api/cart_api.dart' as _i209;
+import '../../features/cart/data/datasources/cart_remote_datasource.dart'
+    as _i15;
+import '../../features/cart/data/repositories/cart_repository_impl.dart'
+    as _i642;
+import '../../features/cart/domain/repositories/cart_repository.dart' as _i322;
+import '../../features/cart/domain/usecases/get_products_by_subcategory_usecase.dart'
+    as _i600;
+import '../../features/cart/presentation/cubit/product_cubit/product_cubit.dart'
+    as _i903;
 import '../../features/categories/data/api/categories_api.dart' as _i146;
 import '../../features/categories/data/datasources/categories_remote_datasource.dart'
     as _i16;
@@ -61,12 +71,23 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i280.AuthLocalDataSource>(() => _i280.AuthLocalDataSourceImpl(
         flutterSecureStorage: gh<_i558.FlutterSecureStorage>()));
     gh.factory<_i231.AuthApis>(() => _i231.AuthApis(gh<_i361.Dio>()));
+    gh.factory<_i209.CartApi>(() => _i209.CartApi(gh<_i361.Dio>()));
     gh.factory<_i146.CategoriesApi>(() => _i146.CategoriesApi(gh<_i361.Dio>()));
     gh.factory<_i182.AuthRemoteDataSource>(
         () => _i182.AuthRemoteDataSourceImpl(authApis: gh<_i231.AuthApis>()));
     gh.factory<_i961.AuthRepository>(() => _i409.AuthRepositoryImpl(
           gh<_i280.AuthLocalDataSource>(),
           authDataSource: gh<_i182.AuthRemoteDataSource>(),
+        ));
+    gh.factory<_i15.CartRemoteDatasource>(
+        () => _i15.CartRemoteDatasourceImpl(cartApi: gh<_i209.CartApi>()));
+    gh.factoryParam<_i903.ProductCubit, String, dynamic>((
+      subcategoryId,
+      _,
+    ) =>
+        _i903.ProductCubit(
+          gh<_i600.GetProductsBySubcategoryUsecase>(),
+          subcategoryId,
         ));
     gh.factory<_i241.CheckIsLoggedUsecase>(() =>
         _i241.CheckIsLoggedUsecase(authRepository: gh<_i961.AuthRepository>()));
@@ -76,6 +97,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i472.SignupUsecase(authRepository: gh<_i961.AuthRepository>()));
     gh.factory<_i16.CategoriesRemoteDatasource>(() =>
         _i16.CategoriesRemoteDatasourceImpl(api: gh<_i146.CategoriesApi>()));
+    gh.factory<_i322.CartRepository>(() => _i642.CartRepositoryImpl(
+        cartRemoteDatasource: gh<_i15.CartRemoteDatasource>()));
     gh.factory<_i488.CategoriesRepository>(() => _i225.CategoriesRepositoryImpl(
         categoriesRemoteDatasource: gh<_i16.CategoriesRemoteDatasource>()));
     gh.lazySingleton<_i117.AuthCubit>(() => _i117.AuthCubit(
